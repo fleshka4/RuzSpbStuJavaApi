@@ -225,4 +225,20 @@ public class RuzSpbStu {
             return null;
         }
     }
+
+    public static ArrayList<Lesson> getLessons(JSONObject jsonObject) {
+        try {
+            ArrayList<Lesson> answer = new ArrayList<>();
+            JSONArray jsonArray = (JSONArray) Objects.requireNonNull(jsonObject).get("lessons");
+            JSONParser jsonParser = new JSONParser();
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject ok = (JSONObject) jsonParser.parse(jsonArray.get(i).toString());
+                answer.add(Lesson.parseJSON(ok));
+            }
+            return answer;
+        } catch (ParseException parseException) {
+            parseException.printStackTrace();
+            return null;
+        }
+    }
 }
