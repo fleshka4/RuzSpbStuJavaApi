@@ -42,7 +42,7 @@ public class RuzSpbStu {
         }
     }
 
-    public ArrayList<Faculty> getFaculties() {
+    public static ArrayList<Faculty> getFaculties() {
         try {
             ArrayList<Faculty> answer = new ArrayList<>();
             JSONObject jsonObject = request(LINK + "faculties");
@@ -59,7 +59,7 @@ public class RuzSpbStu {
         }
     }
 
-    public Faculty getFacultyById(int id) {
+    public static Faculty getFacultyById(int id) {
         try {
             JSONObject jsonObject = request(LINK + "faculties/" + id);
             if (Objects.requireNonNull(jsonObject).get("error") == null) {
@@ -73,7 +73,7 @@ public class RuzSpbStu {
         }
     }
 
-    public ArrayList<Group> getGroupsbyFacultyId(int id) {
+    public static ArrayList<Group> getGroupsbyFacultyId(int id) {
         try {
             if (Objects.requireNonNull(request(LINK + "faculties/" + id)).get("error") != null) {
                 throw new RuzApiException(Objects.requireNonNull(request(LINK +
@@ -86,7 +86,7 @@ public class RuzSpbStu {
         }
     }
 
-    public ArrayList<Group> searchGroupsByName(String name) {
+    public static ArrayList<Group> searchGroupsByName(String name) {
         try {
             if (Objects.requireNonNull(request(LINK + "search/groups?q=" + name)).get("groups") == null) {
                 throw new RuzApiException("Групп не найдено");
@@ -98,7 +98,7 @@ public class RuzSpbStu {
         }
     }
 
-    public ArrayList<Group> getGroupArrayList(JSONObject jsonObject) {
+    public static ArrayList<Group> getGroupArrayList(JSONObject jsonObject) {
         try {
             ArrayList<Group> answer = new ArrayList<>();
             JSONArray jsonArray = (JSONArray) Objects.requireNonNull(jsonObject).get("groups");
@@ -118,7 +118,7 @@ public class RuzSpbStu {
         return getTeacherArrayList(request(LINK + "teachers"));
     }
 
-    public Teacher getTeacherById(int id) {
+    public static Teacher getTeacherById(int id) {
         try {
             JSONObject jsonObject = request(LINK + "teachers/" + id);
             if (Objects.requireNonNull(jsonObject).get("error") == null) {
@@ -132,13 +132,20 @@ public class RuzSpbStu {
         }
     }
 
-    public ArrayList<Teacher> searchTeachersByName(String name) {
-        return Objects.requireNonNull(request(LINK +
-                "search/teachers?q=" + name)).get("teachers") == null ? null
-                : getTeacherArrayList(request(LINK + "search/teachers?q=" + name));
+    public static ArrayList<Teacher> searchTeachersByName(String name) {
+        try {
+            if (Objects.requireNonNull(request(LINK + "search/teachers?q=" + name))
+                    .get("teachers") == null) {
+                throw new RuzApiException("Ни один преподаватель не найден");
+            }
+            return getTeacherArrayList(request(LINK + "search/teachers?q=" + name));
+        } catch (RuzApiException ruzApiException) {
+            ruzApiException.printStackTrace();
+            return null;
+        }
     }
 
-    public ArrayList<Teacher> getTeacherArrayList(JSONObject jsonObject) {
+    public static ArrayList<Teacher> getTeacherArrayList(JSONObject jsonObject) {
         try {
             ArrayList<Teacher> answer = new ArrayList<>();
             JSONArray jsonArray = (JSONArray) Objects.requireNonNull(jsonObject).get("teachers");
@@ -154,7 +161,7 @@ public class RuzSpbStu {
         }
     }
 
-    public ArrayList<Building> getBuildings() {
+    public static ArrayList<Building> getBuildings() {
         try {
             ArrayList<Building> answer = new ArrayList<>();
             JSONObject jsonObject = request(LINK + "buildings");
@@ -171,7 +178,7 @@ public class RuzSpbStu {
         }
     }
 
-    public Building getBuildingById(int id) {
+    public static Building getBuildingById(int id) {
         try {
             JSONObject jsonObject = request(LINK + "buildings/" + id);
             if (Objects.requireNonNull(jsonObject).get("error") == null) {
@@ -185,23 +192,36 @@ public class RuzSpbStu {
         }
     }
 
-    public ArrayList<Auditory> getAuditoriesbyBuildingId(int id) {
+    public static ArrayList<Auditory> getAuditoriesbyBuildingId(int id) {
         try {
-            ArrayList<Auditory> answer = new ArrayList<>();
             if (Objects.requireNonNull(request(LINK + "buildings/" + id)).get("error") != null) {
                 throw new RuzApiException(Objects.requireNonNull(request(LINK + "buildings/" + id))
                         .get("text").toString());
             }
             JSONObject jsonObject = request(LINK + "buildings/" + id + "/rooms");
             JSONArray jsonArray = (JSONArray) Objects.requireNonNull(jsonObject).get("rooms");
+            return parseAuditories(jsonArray);
+        } catch (RuzApiException ruzApiException) {
+            ruzApiException.printStackTrace();
+            return null;
+        }
+    }
+
+    public static ArrayList<Auditory> getAuditories(JSONObject jsonObject) {
+        return parseAuditories((JSONArray) Objects.requireNonNull(jsonObject).get("auditories"));
+    }
+
+    private static ArrayList<Auditory> parseAuditories(JSONArray jsonArray) {
+        try {
+            ArrayList<Auditory> answer = new ArrayList<>();
             JSONParser jsonParser = new JSONParser();
             for (int i = 0; i < jsonArray.size(); i++) {
                 JSONObject ok = (JSONObject) jsonParser.parse(jsonArray.get(i).toString());
                 answer.add(Auditory.parseJSON(ok));
             }
             return answer;
-        } catch (ParseException | RuzApiException e) {
-            e.printStackTrace();
+        } catch (ParseException parseException) {
+            parseException.printStackTrace();
             return null;
         }
     }
