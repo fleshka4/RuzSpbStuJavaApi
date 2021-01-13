@@ -29,7 +29,8 @@ public class TypeObj {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TypeObj typeObj = (TypeObj) o;
-        return getId() == typeObj.getId() && getName().equals(typeObj.getName()) && getAbbr().equals(typeObj.getAbbr());
+        return getId() == typeObj.getId() && getName().equals(typeObj.getName()) &&
+                getAbbr().equals(typeObj.getAbbr());
     }
 
     @Override

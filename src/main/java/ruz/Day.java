@@ -53,6 +53,6 @@ public class Day {
     public static Day parseJSON(JSONObject jsonObject) {
         return new Day(Integer.parseInt(jsonObject.get("weekday").toString()),
                 jsonObject.get("date").toString(),
-                RuzSpbStu.getLessons((JSONObject) jsonObject.get("lessons")));
+                RuzSpbStu.getLessons(jsonObject));
     }
 }

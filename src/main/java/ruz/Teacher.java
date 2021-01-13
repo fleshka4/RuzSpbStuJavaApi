@@ -45,12 +45,18 @@ public class Teacher {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Teacher teacher = (Teacher) o;
-        return getId() == teacher.getId() && getOid() == teacher.getOid() && getFullName().equals(teacher.getFullName()) && getFirstName().equals(teacher.getFirstName()) && getMiddleName().equals(teacher.getMiddleName()) && getLastName().equals(teacher.getLastName()) && getGrade().equals(teacher.getGrade()) && getChair().equals(teacher.getChair());
+        return getId() == teacher.getId() && getOid() == teacher.getOid() &&
+                getFullName().equals(teacher.getFullName()) &&
+                getFirstName().equals(teacher.getFirstName()) &&
+                getMiddleName().equals(teacher.getMiddleName()) &&
+                getLastName().equals(teacher.getLastName()) &&
+                getGrade().equals(teacher.getGrade()) && getChair().equals(teacher.getChair());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getOid(), getFullName(), getFirstName(), getMiddleName(), getLastName(), getGrade(), getChair());
+        return Objects.hash(getId(), getOid(), getFullName(), getFirstName(),
+                getMiddleName(), getLastName(), getGrade(), getChair());
     }
 
     public String getFullName() {

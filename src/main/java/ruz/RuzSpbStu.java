@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -150,6 +152,7 @@ public class RuzSpbStu {
             ArrayList<Teacher> answer = new ArrayList<>();
             JSONArray jsonArray = (JSONArray) Objects.requireNonNull(jsonObject).get("teachers");
             JSONParser jsonParser = new JSONParser();
+            if (jsonArray == null) return null;
             for (int i = 0; i < jsonArray.size(); i++) {
                 JSONObject ok = (JSONObject) jsonParser.parse(jsonArray.get(i).toString());
                 answer.add(Teacher.parseJSON(ok));
@@ -192,7 +195,19 @@ public class RuzSpbStu {
         }
     }
 
-    public static ArrayList<Auditory> getAuditoriesbyBuildingId(int id) {
+    public static Building findBuildingByAuditoryId(int id) {
+        ArrayList<Building> buildings = getBuildings();
+        for (int i = 0; i < Objects.requireNonNull(buildings).size(); i++) {
+            ArrayList<Auditory> auditories = getAuditoriesByBuildingId(buildings.get(i).getId());
+            for (int j = 0; j < Objects.requireNonNull(auditories).size(); j++) {
+                if (id == auditories.get(j).getId())
+                    return buildings.get(i);
+            }
+        }
+        return null;
+    }
+
+    public static ArrayList<Auditory> getAuditoriesByBuildingId(int id) {
         try {
             if (Objects.requireNonNull(request(LINK + "buildings/" + id)).get("error") != null) {
                 throw new RuzApiException(Objects.requireNonNull(request(LINK + "buildings/" + id))
@@ -238,6 +253,106 @@ public class RuzSpbStu {
             return answer;
         } catch (ParseException parseException) {
             parseException.printStackTrace();
+            return null;
+        }
+    }
+
+    public static ArrayList<Day> getDays(JSONObject jsonObject) {
+        try {
+            ArrayList<Day> answer = new ArrayList<>();
+            JSONArray jsonArray = (JSONArray) Objects.requireNonNull(jsonObject).get("days");
+            JSONParser jsonParser = new JSONParser();
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject ok = (JSONObject) jsonParser.parse(jsonArray.get(i).toString());
+                answer.add(Day.parseJSON(ok));
+            }
+            return answer;
+        } catch (ParseException parseException) {
+            parseException.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Schedule getScheduleByGroupId(int id) {
+        try {
+            JSONObject jsonObject = request(LINK + "scheduler/" + id);
+            if (Objects.requireNonNull(jsonObject).get("error") == null) {
+                return Schedule.parseJSON(jsonObject);
+            } else {
+                throw new RuzApiException(jsonObject.get("text").toString() + "а");
+            }
+        } catch (RuzApiException ruzApiException) {
+            ruzApiException.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Schedule getScheduleByGroupIdAndDate(int id, LocalDate date) {
+        try {
+            JSONObject jsonObject = request(LINK + "scheduler/" + id + "?date=" + date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            if (Objects.requireNonNull(jsonObject).get("error") == null) {
+                return Schedule.parseJSON(jsonObject);
+            } else {
+                throw new RuzApiException(jsonObject.get("text").toString() + "а");
+            }
+        } catch (RuzApiException ruzApiException) {
+            ruzApiException.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Schedule getScheduleByTeacherId(int id) {
+        try {
+            JSONObject jsonObject = request(LINK + "teachers/" + id + "/scheduler");
+            if (Objects.requireNonNull(jsonObject).get("error") == null) {
+                return Schedule.parseJSON(jsonObject);
+            } else {
+                throw new RuzApiException(jsonObject.get("text").toString());
+            }
+        } catch (RuzApiException ruzApiException) {
+            ruzApiException.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Schedule getScheduleByTeacherIdAndDate(int id, LocalDate date) {
+        try {
+            JSONObject jsonObject = request(LINK + "teachers/" + id + "/scheduler?date=" + date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            if (Objects.requireNonNull(jsonObject).get("error") == null) {
+                return Schedule.parseJSON(jsonObject);
+            } else {
+                throw new RuzApiException(jsonObject.get("text").toString());
+            }
+        } catch (RuzApiException ruzApiException) {
+            ruzApiException.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Schedule getScheduleByAuditoryId(int id) {
+        try {
+            JSONObject jsonObject = request(LINK + "buildings/" + findBuildingByAuditoryId(id) + "/rooms/" + id + "/scheduler");
+            if (Objects.requireNonNull(jsonObject).get("error") == null) {
+                return Schedule.parseJSON(jsonObject);
+            } else {
+                throw new RuzApiException(jsonObject.get("text").toString());
+            }
+        } catch (RuzApiException ruzApiException) {
+            ruzApiException.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Schedule getScheduleByAuditoryIdAndDate(int id, LocalDate date) {
+        try {
+            JSONObject jsonObject = request(LINK + "buildings/" + findBuildingByAuditoryId(id) + "/rooms/" + id + "/scheduler?date=" + date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            if (Objects.requireNonNull(jsonObject).get("error") == null) {
+                return Schedule.parseJSON(jsonObject);
+            } else {
+                throw new RuzApiException(jsonObject.get("text").toString());
+            }
+        } catch (RuzApiException ruzApiException) {
+            ruzApiException.printStackTrace();
             return null;
         }
     }

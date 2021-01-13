@@ -6,11 +6,10 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Objects;
 
-//29.01.2021
 public class Lesson {
     private final String subject;
     private final String subjectShort;
-    private int type = 0;
+    private final int type;
     private final String additionalInfo;
     private final LocalTime timeStart;
     private final LocalTime timeEnd;

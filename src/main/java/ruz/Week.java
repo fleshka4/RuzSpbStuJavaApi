@@ -3,6 +3,7 @@ package ruz;
 import org.json.simple.JSONObject;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Week {
@@ -30,7 +31,8 @@ public class Week {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Week week = (Week) o;
-        return isOdd() == week.isOdd() && getDateStart().equals(week.getDateStart()) && getDateEnd().equals(week.getDateEnd());
+        return isOdd() == week.isOdd() && getDateStart().equals(week.getDateStart()) &&
+                getDateEnd().equals(week.getDateEnd());
     }
 
     @Override
@@ -51,8 +53,10 @@ public class Week {
     }
 
     public static Week parseJSON(JSONObject jsonObject) {
-        return new Week(LocalDate.parse(jsonObject.get("date_start").toString()),
-                LocalDate.parse(jsonObject.get("date_end").toString()),
+        return new Week(LocalDate.parse((CharSequence) jsonObject.get("date_start"),
+                DateTimeFormatter.ofPattern("yyyy.MM.dd")),
+                LocalDate.parse((CharSequence) jsonObject.get("date_end"),
+                        DateTimeFormatter.ofPattern("yyyy.MM.dd")),
                 Boolean.parseBoolean(jsonObject.get("is_odd").toString()));
     }
 }
