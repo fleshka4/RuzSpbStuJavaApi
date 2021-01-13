@@ -22,7 +22,7 @@ public class RuzSpbStu {
 
     }
 
-    public static JSONObject request(String requestLink) {
+    private static JSONObject request(String requestLink) {
         try {
             URL ruz = new URL(requestLink);
             URLConnection yc = ruz.openConnection();
@@ -116,7 +116,7 @@ public class RuzSpbStu {
         }
     }
 
-    public ArrayList<Teacher> getTeachers() {
+    public static ArrayList<Teacher> getTeachers() {
         return getTeacherArrayList(request(LINK + "teachers"));
     }
 
@@ -289,7 +289,8 @@ public class RuzSpbStu {
 
     public static Schedule getScheduleByGroupIdAndDate(int id, LocalDate date) {
         try {
-            JSONObject jsonObject = request(LINK + "scheduler/" + id + "?date=" + date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            JSONObject jsonObject = request(LINK + "scheduler/" + id +
+                    "?date=" + date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
             if (Objects.requireNonNull(jsonObject).get("error") == null) {
                 return Schedule.parseJSON(jsonObject);
             } else {
@@ -317,7 +318,8 @@ public class RuzSpbStu {
 
     public static Schedule getScheduleByTeacherIdAndDate(int id, LocalDate date) {
         try {
-            JSONObject jsonObject = request(LINK + "teachers/" + id + "/scheduler?date=" + date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            JSONObject jsonObject = request(LINK + "teachers/" + id +
+                    "/scheduler?date=" + date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
             if (Objects.requireNonNull(jsonObject).get("error") == null) {
                 return Schedule.parseJSON(jsonObject);
             } else {
@@ -331,7 +333,8 @@ public class RuzSpbStu {
 
     public static Schedule getScheduleByAuditoryId(int id) {
         try {
-            JSONObject jsonObject = request(LINK + "buildings/" + findBuildingByAuditoryId(id) + "/rooms/" + id + "/scheduler");
+            JSONObject jsonObject = request(LINK + "buildings/" +
+                    findBuildingByAuditoryId(id) + "/rooms/" + id + "/scheduler");
             if (Objects.requireNonNull(jsonObject).get("error") == null) {
                 return Schedule.parseJSON(jsonObject);
             } else {
@@ -345,7 +348,9 @@ public class RuzSpbStu {
 
     public static Schedule getScheduleByAuditoryIdAndDate(int id, LocalDate date) {
         try {
-            JSONObject jsonObject = request(LINK + "buildings/" + findBuildingByAuditoryId(id) + "/rooms/" + id + "/scheduler?date=" + date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            JSONObject jsonObject = request(LINK + "buildings/" +
+                    findBuildingByAuditoryId(id) + "/rooms/" + id + "/scheduler?date=" +
+                    date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
             if (Objects.requireNonNull(jsonObject).get("error") == null) {
                 return Schedule.parseJSON(jsonObject);
             } else {
