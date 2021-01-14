@@ -1,15 +1,15 @@
-package ruz;
+package com.fleshka4.spbstu.ruz.api;
 
 import org.json.simple.JSONObject;
 
 import java.util.Objects;
 
-public class TypeObj {
+public class Faculty {
     private final int id;
     private final String name;
     private final String abbr;
 
-    public TypeObj(int id, String name, String abbr) {
+    public Faculty(int id, String name, String abbr) {
         this.id = id;
         this.name = name;
         this.abbr = abbr;
@@ -17,7 +17,7 @@ public class TypeObj {
 
     @Override
     public String toString() {
-        return "TypeObj{" +
+        return "Faculty{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", abbr='" + abbr + '\'' +
@@ -28,9 +28,10 @@ public class TypeObj {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TypeObj typeObj = (TypeObj) o;
-        return getId() == typeObj.getId() && getName().equals(typeObj.getName()) &&
-                getAbbr().equals(typeObj.getAbbr());
+        Faculty faculty = (Faculty) o;
+        return getId() == faculty.getId() &&
+                getName().equals(faculty.getName()) &&
+                getAbbr().equals(faculty.getAbbr());
     }
 
     @Override
@@ -50,9 +51,8 @@ public class TypeObj {
         return abbr;
     }
 
-    public static TypeObj parseJSON(JSONObject jsonObject) {
-        return new TypeObj(Integer.parseInt(jsonObject.get("id").toString()),
-                jsonObject.get("name").toString(),
-                jsonObject.get("abbr").toString());
+    public static Faculty parseJSON(JSONObject jsonObject) {
+        return new Faculty(Integer.parseInt(jsonObject.get("id").toString()),
+                jsonObject.get("name").toString(), jsonObject.get("abbr").toString());
     }
 }

@@ -1,4 +1,4 @@
-package ruz;
+package com.fleshka4.spbstu.ruz.api;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
