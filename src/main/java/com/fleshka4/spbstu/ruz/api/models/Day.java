@@ -1,5 +1,6 @@
-package com.fleshka4.spbstu.ruz.api;
+package com.fleshka4.spbstu.ruz.api.models;
 
+import com.fleshka4.spbstu.ruz.api.RuzSpbStu;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;

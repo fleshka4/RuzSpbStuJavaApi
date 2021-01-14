@@ -1,4 +1,4 @@
-package com.fleshka4.spbstu.ruz.api;
+package com.fleshka4.spbstu.ruz.api.models;
 
 public class RuzApiException extends Exception {
     public RuzApiException(String message) {

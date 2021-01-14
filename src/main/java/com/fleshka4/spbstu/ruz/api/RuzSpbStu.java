@@ -1,5 +1,6 @@
 package com.fleshka4.spbstu.ruz.api;
 
+import com.fleshka4.spbstu.ruz.api.models.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
