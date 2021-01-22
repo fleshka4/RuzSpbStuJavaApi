@@ -14,6 +14,7 @@ import java.net.URLConnection;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Objects;
 
 public class RuzSpbStu {
@@ -74,6 +75,18 @@ public class RuzSpbStu {
             ruzApiException.printStackTrace();
             return null;
         }
+    }
+
+    public static ArrayList<Faculty> searchFacultiesByName(String name) {
+        ArrayList<Faculty> faculties = getFaculties();
+        ArrayList<Faculty> result = new ArrayList<>();
+        for (int i = 0; i < Objects.requireNonNull(faculties).size(); i++) {
+            if (faculties.get(i).getName().toLowerCase(Locale.ROOT).contains(name.toLowerCase(Locale.ROOT)) ||
+                    faculties.get(i).getAbbr().toLowerCase(Locale.ROOT).contains(name.toLowerCase(Locale.ROOT))) {
+                result.add(faculties.get(i));
+            }
+        }
+        return result;
     }
 
     public static ArrayList<Group> getGroupsbyFacultyId(int id) {
@@ -194,6 +207,32 @@ public class RuzSpbStu {
             ruzApiException.printStackTrace();
             return null;
         }
+    }
+
+    public static ArrayList<Building> searchBuildingsByName(String name) {
+        ArrayList<Building> buildings = getBuildings();
+        ArrayList<Building> result = new ArrayList<>();
+        for (int i = 0; i < Objects.requireNonNull(buildings).size(); i++) {
+            if (buildings.get(i).getName().toLowerCase(Locale.ROOT).contains(name.toLowerCase(Locale.ROOT)) ||
+                    buildings.get(i).getAbbr().toLowerCase(Locale.ROOT).contains(name.toLowerCase(Locale.ROOT))) {
+                result.add(buildings.get(i));
+            }
+        }
+        return result;
+    }
+
+    public static ArrayList<Auditory> searchAuditoriesByName(String name) {
+        ArrayList<Auditory> result = new ArrayList<>();
+        ArrayList<Building> buildings = getBuildings();
+        for (int i = 0; i < Objects.requireNonNull(buildings).size(); i++) {
+            ArrayList<Auditory> auditories = getAuditoriesByBuildingId(buildings.get(i).getId());
+            for (int j = 0; j < Objects.requireNonNull(auditories).size(); j++) {
+                if (auditories.get(j).getName().toLowerCase(Locale.ROOT).startsWith(name.toLowerCase(Locale.ROOT))) {
+                    result.add(auditories.get(j));
+                }
+            }
+        }
+        return result;
     }
 
     public static Building findBuildingByAuditoryId(int id) {

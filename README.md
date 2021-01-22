@@ -34,14 +34,15 @@
 #### Факультеты (институты)
 
 `ArrayList<Faculty> getFaculties()` - возвращает список факультетов (институтов)  
-`Faculty getFacultyById(int id)` - возвращает факультет (институт) по его ID
+`Faculty getFacultyById(int id)` - возвращает факультет (институт) по его ID  
+`ArrayList<Faculty> searchFacultiesByName(String name)` - выполняет поиск факультетов (институтов)
+по названию/аббревиатуре и возвращает найденные факультеты (институты)
 
 #### Группы
 
 `ArrayList<Group> getGroupsbyFacultyId(int id)` - возвращает группы факультета (института) по его ID  
-`ArrayList<Group> searchGroupsByName(String name)` - выполняет поиск и возвращает найденные группы факультета (
-института)
-по переданной строке
+`ArrayList<Group> searchGroupsByName(String name)` - выполняет поиск и возвращает найденные группы факультета
+(института) по переданной строке
 
 #### Преподаватели
 
@@ -53,11 +54,15 @@
 
 `ArrayList<Building> getBuildings()` - возвращает список корпусов  
 `Building getBuildingById(int id)` - возвращает информацию о корпусе по его ID  
-`Building findBuildingByAuditoryId(int id)` - выполняет поиск корпуса по ID аудитории
+`Building findBuildingByAuditoryId(int id)` - выполняет поиск корпуса по ID аудитории  
+`ArrayList<Building> searchBuildingsByName(String name)` - выполняет поиск корпусов по названию/аббревиатуре
+и возвращает найденные корпуса
 
 #### Аудитории
 
-`ArrayList<Auditory> getAuditoriesByBuildingId(int id)` - возвращает список аудиторий корпуса по его ID
+`ArrayList<Auditory> getAuditoriesByBuildingId(int id)` - возвращает список аудиторий корпуса по его ID  
+`ArrayList<Auditory> searchAuditoriesByName(String name)` - выполняет поиск аудиторий по названию аудиторий и
+возвращает найденные аудитории
 
 ### Установка
 
