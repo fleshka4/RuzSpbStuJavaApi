@@ -18,7 +18,7 @@ public class Lesson {
     private final int parity;
     private final ArrayList<Group> groups;
     private final ArrayList<Teacher> teachers;
-    private final ArrayList<Auditory> auditories;
+    private final Auditory auditories;
     private final String webinarUrl;
     private final String lmsUrl;
 
@@ -26,7 +26,7 @@ public class Lesson {
                   String additionalInfo, LocalTime timeStart,
                   LocalTime timeEnd, TypeObj typeObj,
                   int parity, ArrayList<Group> groups, ArrayList<Teacher> teachers,
-                  ArrayList<Auditory> auditories, String webinarUrl, String lmsUrl) {
+                  Auditory auditories, String webinarUrl, String lmsUrl) {
         this.subject = subject;
         this.subjectShort = subjectShort;
         this.type = type;
@@ -127,7 +127,7 @@ public class Lesson {
         return teachers;
     }
 
-    public ArrayList<Auditory> getAuditories() {
+    public Auditory getAuditories() {
         return auditories;
     }
 

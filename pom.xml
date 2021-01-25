@@ -6,7 +6,7 @@
 
     <groupId>org.fleshka4</groupId>
     <artifactId>ruzapi</artifactId>
-    <version>v1.1</version>
+    <version>v1.2</version>
     <build>
         <plugins>
             <plugin>

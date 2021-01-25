@@ -1,32 +1,35 @@
 package com.fleshka4.spbstu.ruz.api.models;
 
+import com.fleshka4.spbstu.ruz.api.RuzSpbStu;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Auditory {
-    private final int id;
-    private final String name;
+    private final ArrayList<Room> rooms;
+    private final Building building;
 
-    public Auditory(int id, String name) {
-        this.id = id;
-        this.name = name;
+    public Auditory(ArrayList<Room> rooms, Building building) {
+        this.rooms = rooms;
+        this.building = building;
     }
 
     @Override
     public String toString() {
         return "Auditory{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "rooms=" + rooms +
+                ", building=" + building +
                 '}';
     }
 
-    public int getId() {
-        return id;
+    public ArrayList<Room> getRooms() {
+        return rooms;
     }
 
-    public String getName() {
-        return name;
+    public Building getBuilding() {
+        return building;
     }
 
     @Override
@@ -34,17 +37,16 @@ public class Auditory {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Auditory auditory = (Auditory) o;
-        return getId() == auditory.getId() &&
-                getName().equals(auditory.getName());
+        return Objects.equals(getRooms(), auditory.getRooms()) && getBuilding().equals(auditory.getBuilding());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName());
+        return Objects.hash(getRooms(), getBuilding());
     }
 
     public static Auditory parseJSON(JSONObject jsonObject) {
-        return new Auditory(Integer.parseInt(jsonObject.get("id").toString()),
-                jsonObject.get("name").toString());
+        return new Auditory(RuzSpbStu.getRooms((JSONObject) jsonObject.get("rooms")),
+                Building.parseJSON((JSONObject) jsonObject.get("building")));
     }
 }

@@ -225,11 +225,15 @@ public class RuzSpbStu {
         ArrayList<Auditory> result = new ArrayList<>();
         ArrayList<Building> buildings = getBuildings();
         for (int i = 0; i < Objects.requireNonNull(buildings).size(); i++) {
-            ArrayList<Auditory> auditories = getAuditoriesByBuildingId(buildings.get(i).getId());
-            for (int j = 0; j < Objects.requireNonNull(auditories).size(); j++) {
-                if (auditories.get(j).getName().toLowerCase(Locale.ROOT).startsWith(name.toLowerCase(Locale.ROOT))) {
-                    result.add(auditories.get(j));
+            ArrayList<Room> rooms = Objects.requireNonNull(getAuditoriesByBuildingId(buildings.get(i).getId())).getRooms();
+            ArrayList<Room> temp = new ArrayList<>();
+            for (int j = 0; j < Objects.requireNonNull(rooms).size(); j++) {
+                if (rooms.get(j).getName().toLowerCase(Locale.ROOT).contains(name.toLowerCase(Locale.ROOT))) {
+                    temp.add(rooms.get(j));
                 }
+            }
+            if (temp.size() > 0) {
+                result.add(new Auditory(temp, buildings.get(i)));
             }
         }
         return result;
@@ -238,47 +242,65 @@ public class RuzSpbStu {
     public static Building findBuildingByAuditoryId(int id) {
         ArrayList<Building> buildings = getBuildings();
         for (int i = 0; i < Objects.requireNonNull(buildings).size(); i++) {
-            ArrayList<Auditory> auditories = getAuditoriesByBuildingId(buildings.get(i).getId());
-            for (int j = 0; j < Objects.requireNonNull(auditories).size(); j++) {
-                if (id == auditories.get(j).getId())
+            ArrayList<Room> rooms = Objects.requireNonNull(getAuditoriesByBuildingId(buildings.get(i).getId())).getRooms();
+            for (int j = 0; j < Objects.requireNonNull(rooms).size(); j++) {
+                if (id == rooms.get(j).getId())
                     return buildings.get(i);
             }
         }
         return null;
     }
 
-    public static ArrayList<Auditory> getAuditoriesByBuildingId(int id) {
+    public static Auditory getAuditoriesByBuildingId(int id) {
         try {
             if (Objects.requireNonNull(request(LINK + "buildings/" + id)).get("error") != null) {
                 throw new RuzApiException(Objects.requireNonNull(request(LINK + "buildings/" + id))
                         .get("text").toString());
             }
             JSONObject jsonObject = request(LINK + "buildings/" + id + "/rooms");
-            JSONArray jsonArray = (JSONArray) Objects.requireNonNull(jsonObject).get("rooms");
-            return parseAuditories(jsonArray);
+            return new Auditory(getRooms(jsonObject),
+                    Building.parseJSON((JSONObject) Objects.requireNonNull(jsonObject).get("building")));
         } catch (RuzApiException ruzApiException) {
             ruzApiException.printStackTrace();
             return null;
         }
     }
 
-    public static ArrayList<Auditory> getAuditories(JSONObject jsonObject) {
-        return parseAuditories((JSONArray) Objects.requireNonNull(jsonObject).get("auditories"));
+    public static Auditory getAuditories(JSONObject jsonObject) {
+        try {
+            JSONArray jsonArray = (JSONArray) jsonObject.get("auditories");
+            JSONParser jsonParser = new JSONParser();
+            jsonObject = (JSONObject) ((JSONObject) jsonParser.parse(jsonArray.get(0).toString())).get("building");
+            return new Auditory(parseAuditories(jsonArray),
+                    Building.parseJSON(jsonObject));
+        } catch (ParseException parseException) {
+            parseException.printStackTrace();
+            return null;
+        }
     }
 
-    private static ArrayList<Auditory> parseAuditories(JSONArray jsonArray) {
+    private static ArrayList<Room> parseAuditories(JSONArray jsonArray) {
+        return parseRooms(jsonArray);
+    }
+
+    private static ArrayList<Room> parseRooms(JSONArray jsonArray) {
         try {
-            ArrayList<Auditory> answer = new ArrayList<>();
+            ArrayList<Room> answer = new ArrayList<>();
             JSONParser jsonParser = new JSONParser();
             for (int i = 0; i < jsonArray.size(); i++) {
                 JSONObject ok = (JSONObject) jsonParser.parse(jsonArray.get(i).toString());
-                answer.add(Auditory.parseJSON(ok));
+                answer.add(Room.parseJSON(ok));
             }
             return answer;
         } catch (ParseException parseException) {
             parseException.printStackTrace();
             return null;
         }
+    }
+
+    public static ArrayList<Room> getRooms(JSONObject jsonObject) {
+        JSONArray jsonArray = (JSONArray) Objects.requireNonNull(jsonObject).get("rooms");
+        return parseRooms(jsonArray);
     }
 
     public static ArrayList<Lesson> getLessons(JSONObject jsonObject) {
