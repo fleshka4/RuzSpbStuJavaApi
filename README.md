@@ -60,7 +60,8 @@
 
 #### Аудитории
 
-`ArrayList<Auditory> getAuditoriesByBuildingId(int id)` - возвращает список аудиторий корпуса по его ID  
+`Auditory getAuditoriesByBuildingId(int id)` - возвращает объект класса Auditory, который содержит в себе список
+аудиторий корпуса по его ID  
 `ArrayList<Auditory> searchAuditoriesByName(String name)` - выполняет поиск аудиторий по названию аудиторий и
 возвращает найденные аудитории
 
@@ -84,7 +85,7 @@ Step 1. Добавьте JitPack репозиторий в ваш файл ко�
 Step 2. Добавьте зависимость
 
 	dependencies {
-	        implementation 'com.github.fleshka4:RuzSpbStuJavaApi:v1.1'
+	        implementation 'com.github.fleshka4:RuzSpbStuJavaApi:v1.2'
 	}
 
 #### Maven
@@ -101,5 +102,5 @@ Step 2. Добавьте зависимость
 	<dependency>
 	    <groupId>com.github.fleshka4</groupId>
 	    <artifactId>RuzSpbStuJavaApi</artifactId>
-	    <version>v1.1</version>
+	    <version>v1.2</version>
 	</dependency>
