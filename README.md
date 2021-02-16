@@ -85,7 +85,7 @@ Step 1. Добавьте JitPack репозиторий в ваш файл ко�
 Step 2. Добавьте зависимость
 
 	dependencies {
-	        implementation 'com.github.fleshka4:RuzSpbStuJavaApi:v1.2'
+	        implementation 'com.github.fleshka4:RuzSpbStuJavaApi:v1.2.1'
 	}
 
 #### Maven
@@ -102,5 +102,5 @@ Step 2. Добавьте зависимость
 	<dependency>
 	    <groupId>com.github.fleshka4</groupId>
 	    <artifactId>RuzSpbStuJavaApi</artifactId>
-	    <version>v1.2</version>
+	    <version>v1.2.1</version>
 	</dependency>
