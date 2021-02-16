@@ -149,6 +149,7 @@ public class RuzSpbStu {
     }
 
     public static ArrayList<Teacher> searchTeachersByName(String name) {
+        name = name.replace(" ", "%20");
         try {
             if (Objects.requireNonNull(request(LINK + "search/teachers?q=" + name))
                     .get("teachers") == null) {
